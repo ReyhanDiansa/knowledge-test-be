@@ -1,11 +1,15 @@
 const productModel = require("../models/productModel");
 const mongoose = require("mongoose");
-const { addProductSchema, updateProductSchema } = require("../utils/validationSchema");
+const {
+  addProductSchema,
+  updateProductSchema,
+} = require("../utils/validationSchema");
 const { responseFormatter } = require("../utils/utils");
 const upload = require("../utils/upload");
 require("dotenv");
 const { deleteFile } = require("../utils/deleteFile");
 const handleUpload = require("../utils/upload");
+const CategoryModel = require("../models/categoryModel");
 
 exports.addProduct = [
   upload,
@@ -41,6 +45,15 @@ exports.addProduct = [
         category_id: req.body.category_id,
       };
 
+      const checkCategory = await CategoryModel.findOne({
+        _id: data.category_id,
+      });
+
+      if (!checkCategory) {
+        await deleteFile(req.file.location);
+        return responseFormatter(res, 400, false, `Category not found`, null);
+      }
+
       const lowercaseName = data.name.toLowerCase();
       const product = await productModel.findOne({
         name: { $regex: new RegExp(`^${lowercaseName}$`, "i") },
@@ -63,7 +76,7 @@ exports.addProduct = [
         return responseFormatter(
           res,
           400,
-          true,
+          false,
           `Product with name ${data.name} already exists, please look for another name`,
           null
         );
@@ -237,6 +250,17 @@ exports.updateProduct = [
         image: "",
         category_id: request.body.category_id,
       };
+
+      const checkCategory = await CategoryModel.findOne({
+        _id: data.category_id,
+      });
+
+      if (!checkCategory) {
+        if (request.file) {
+          await deleteFile(request.file.location);
+        }
+        return responseFormatter(res, 400, false, `Category not found`, null);
+      }
 
       const lowercaseName = data.name.toLowerCase();
 

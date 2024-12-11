@@ -1,4 +1,3 @@
-// validationSchemas.js
 const Joi = require("joi");
 
 const loginSchema = Joi.object({
@@ -34,10 +33,18 @@ const updateProductSchema = Joi.object({
   category_id: Joi.optional(),
 });
 
+const userUpdateSchema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).optional(),
+    gender: Joi.string().valid("laki-laki", "perempuan").required(),
+  });
+
 module.exports = {
   loginSchema,
   registerSchema,
   addCategorySchema,
   addProductSchema,
   updateProductSchema,
+  userUpdateSchema
 };

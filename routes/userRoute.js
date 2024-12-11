@@ -4,6 +4,16 @@ const userController = require("../controllers/userController");
 const app = express();
 app.use(express.json());
 
+
+app.get(
+  "/:id",
+  userController.findUser
+);
+app.put(
+  "/:id",
+  userController.updateUser
+);
+
 app.post("/login", userController.Login);
 app.post(
   "/register",

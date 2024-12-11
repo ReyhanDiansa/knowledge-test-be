@@ -4,13 +4,20 @@ var validator = require("email-validator");
 
 const jsonwebtoken = require("jsonwebtoken");
 const { responseFormatter } = require("../utils/utils");
-const { loginSchema, registerSchema } = require("../utils/validationSchema");
+const { loginSchema, registerSchema, userUpdateSchema } = require("../utils/validationSchema");
+const mongoose = require("mongoose");
 
 exports.Login = async (request, response) => {
   try {
     const { error } = loginSchema.validate(request.body);
     if (error) {
-      return responseFormatter(response, 400, false, error.details[0].message, null);
+      return responseFormatter(
+        response,
+        400,
+        false,
+        error.details[0].message,
+        null
+      );
     }
 
     const data = {
@@ -59,10 +66,15 @@ exports.Login = async (request, response) => {
 
 exports.Register = async (request, response) => {
   try {
-
     const { error } = registerSchema.validate(request.body);
     if (error) {
-      return responseFormatter(response, 400, false, error.details[0].message, null);
+      return responseFormatter(
+        response,
+        400,
+        false,
+        error.details[0].message,
+        null
+      );
     }
 
     const data = {
@@ -104,6 +116,111 @@ exports.Register = async (request, response) => {
         400,
         true,
         "User already exists, please look for another email",
+        null
+      );
+    }
+  } catch (error) {
+    return responseFormatter(response, 500, false, error.message, null);
+  }
+};
+
+exports.findUser = async (request, response) => {
+  try {
+    const { id } = request.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return responseFormatter(response, 400, false, "Invalid Id", null);
+    }
+
+    const user = await userModel.findById(id);
+    if (!user) {
+      return responseFormatter(
+        response,
+        404,
+        false,
+        `Cannot find any data with ID ${id}`,
+        null
+      );
+    }
+
+    return responseFormatter(
+      response,
+      200,
+      true,
+      "Successfully get user",
+      user
+    );
+  } catch (error) {
+    return responseFormatter(response, 500, false, error.message, null);
+  }
+};
+
+exports.updateUser = async (request, response) => {
+  try {
+    const { error } = userUpdateSchema.validate(request.body);
+    if (error) {
+      return responseFormatter(
+        response,
+        400,
+        false,
+        error.details[0].message,
+        null
+      );
+    }
+
+    const { id } = request.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return responseFormatter(response, 400, false, "Invalid Id", null);
+    }
+
+    const find = await userModel.findOne({ _id: id });
+    if (!find || find === null) {
+      return responseFormatter(
+        response,
+        404,
+        false,
+        `Cannot find any data with ID ${id}`,
+        null
+      );
+    }
+
+    const data = {
+      name: request.body.name,
+      email: request.body.email,
+      gender: request.body.gender,
+    };
+
+    if (request.body.password) {
+      data.password = md5(request.body.password);
+    }
+
+    const lowercaseName = data.name.toLowerCase();
+
+    let checkUser = await userModel.findOne({
+      $and: [
+        {
+          _id: { $ne: id },
+          name: { $regex: new RegExp(`^${lowercaseName}$`, "i") },
+        },
+      ],
+    });
+
+    if (!checkUser || checkUser === null) {
+      await userModel.findByIdAndUpdate(id, data);
+      const newItem = await userModel.findOne({ _id: id });
+      return responseFormatter(
+        response,
+        200,
+        true,
+        "Successfully update user",
+        newItem
+      );
+    } else {
+      return responseFormatter(
+        response,
+        400,
+        false,
+        `User with name ${data.name} already exists, please look for another name`,
         null
       );
     }

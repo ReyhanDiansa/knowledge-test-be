@@ -206,7 +206,7 @@ exports.updateCategory = async (request, response) => {
       return responseFormatter(
         response,
         400,
-        true,
+        false,
         `Categroy with name ${data.name} already exists, please look for another name`,
         null
       );
@@ -222,6 +222,7 @@ exports.findCategory = async (request, response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return responseFormatter(response, 400, false, "Invalid Id", null);
     }
+
     const category = await categoryModel.findById(id);
     if (!category) {
       return responseFormatter(
