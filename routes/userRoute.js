@@ -4,7 +4,10 @@ const userController = require("../controllers/userController");
 const app = express();
 app.use(express.json());
 
-
+app.get(
+  "/",
+  userController.getUser
+);
 app.get(
   "/:id",
   userController.findUser

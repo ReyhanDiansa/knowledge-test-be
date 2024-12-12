@@ -228,3 +228,79 @@ exports.updateUser = async (request, response) => {
     return responseFormatter(response, 500, false, error.message, null);
   }
 };
+
+exports.getUser = async (request, response) => {
+  try {
+    const page = parseInt(request.query.page) || 1;
+    const limit = parseInt(request.query.limit) || 10;
+    const { name } = request.query;
+    const skip = (page - 1) * limit;
+    let totalItems;
+    let category;
+
+    if (name) {
+      const lowercaseName = name.toLowerCase();
+
+      totalItems = await userModel.countDocuments({
+        name: { $regex: new RegExp(lowercaseName, "i") },
+      });
+      if (totalItems === 0) {
+        return responseFormatter(
+          response,
+          404,
+          false,
+          "No users data",
+          null
+        );
+      }
+
+      users = await userModel
+        .find({ name: { $regex: new RegExp(lowercaseName, "i") } })
+        .skip(skip)
+        .limit(limit);
+    } else {
+      totalItems = await userModel.countDocuments();
+      if (totalItems === 0) {
+        return responseFormatter(
+          response,
+          404,
+          false,
+          "No users data",
+          null
+        );
+      }
+
+      users = await userModel.find().skip(skip).limit(limit);
+    }
+
+    const totalPages = Math.ceil(totalItems / limit);
+    if (page > totalPages) {
+      return responseFormatter(
+        response,
+        400,
+        false,
+        "Page exceed total pages",
+        null
+      );
+    } else {
+      const responseData = {
+        items: users,
+        meta: {
+          total_items: totalItems,
+          current_page: page,
+          total_pages: totalPages,
+          per_page: limit,
+        },
+      };
+      return responseFormatter(
+        response,
+        200,
+        true,
+        "Successfully get users data",
+        responseData
+      );
+    }
+  } catch (error) {
+    return responseFormatter(response, 500, false, error.message, null);
+  }
+};

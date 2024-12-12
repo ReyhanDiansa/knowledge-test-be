@@ -109,7 +109,7 @@ exports.getCategory = async (request, response) => {
       category = await categoryModel
         .find({ name: { $regex: new RegExp(lowercaseName, "i") } })
         .skip(skip)
-        .limit(pageSize);
+        .limit(limit);
     } else {
       totalItems = await categoryModel.countDocuments();
       if (totalItems === 0) {
