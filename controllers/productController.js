@@ -159,6 +159,7 @@ exports.getProduct = async (request, response) => {
 
       product = await productModel
         .find({ name: { $regex: new RegExp(lowercaseName, "i") } })
+        .populate("category_id")
         .skip(skip)
         .limit(limit);
     } else {
@@ -173,7 +174,7 @@ exports.getProduct = async (request, response) => {
         );
       }
 
-      product = await productModel.find().skip(skip).limit(limit);
+      product = await productModel.find().populate("category_id").skip(skip).limit(limit);
     }
 
     const totalPages = Math.ceil(totalItems / limit);
@@ -321,7 +322,7 @@ exports.findProduct = async (request, response) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return responseFormatter(response, 400, false, "Invalid Id", null);
     }
-    const product = await productModel.findById(id);
+    const product = await productModel.findById(id).populate("category_id");
     if (!product) {
       return responseFormatter(
         response,
@@ -369,7 +370,7 @@ exports.findAll = async (request, response) => {
 
       product = await productModel.find({
         name: { $regex: new RegExp(lowercaseName, "i") },
-      });
+      }).populate("category_id");
     } else {
       totalItems = await productModel.countDocuments();
       if (totalItems === 0) {
@@ -382,7 +383,7 @@ exports.findAll = async (request, response) => {
         );
       }
 
-      product = await productModel.find();
+      product = await productModel.find().populate("category_id");
     }
 
     return responseFormatter(

@@ -9,12 +9,16 @@ app.get(
   userController.getUser
 );
 app.get(
-  "/:id",
+  "/find/:id",
   userController.findUser
 );
 app.put(
   "/:id",
   userController.updateUser
+);
+app.delete(
+  "/:id",
+  userController.deleteUser
 );
 
 app.post("/login", userController.Login);

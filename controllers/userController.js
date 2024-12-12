@@ -304,3 +304,33 @@ exports.getUser = async (request, response) => {
     return responseFormatter(response, 500, false, error.message, null);
   }
 };
+
+exports.deleteUser = async (request, response) => {
+  try {
+    const { id } = request.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return responseFormatter(response, 400, false, "Invalid Id", null);
+    }
+    const user = await userModel.findByIdAndDelete(id);
+
+    if (!user) {
+      return responseFormatter(
+        response,
+        404,
+        false,
+        `Cannot find any data with ID ${id}`,
+        null
+      );
+    }
+
+    return responseFormatter(
+      response,
+      200,
+      true,
+      "Successfully delete user",
+      null
+    );
+  } catch (error) {
+    return responseFormatter(response, 500, false, error.message, null);
+  }
+};
