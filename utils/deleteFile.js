@@ -26,7 +26,8 @@ const deleteFile = async (url) => {
         return false;
       }
     } else {
-      await del(blob.url);
+      await del(url);
+      return true;
     }
   } catch (error) {
     return false;
