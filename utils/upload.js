@@ -67,7 +67,7 @@ const handleUpload = (req, res, next) => {
             const fileUrl = await uploadToCloud(req.file);
             req.file.location = fileUrl;
           } else if (process.env.APP_ENV === "local" && req.file) {
-            req.file.location = `http://localhost:${process.env.PORT}/${process.env.LOCAL_UPLOAD_FOLDER}/${req.file.filename}`;
+            req.file.location = `http://localhost:${process.env.PORT}/api/v1/file/${req.file.filename}`;
           }
           next();
         } catch (uploadError) {

@@ -5,6 +5,8 @@ require("dotenv/config");
 const userRoute = require("./routes/userRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
+const statisticRoute = require("./routes/statisticRoute");
+const fileRoute = require("./routes/fileRoute");
 
 const app = express();
 
@@ -16,6 +18,8 @@ const apiRouter = express.Router();
 apiRouter.use(`/user`, userRoute);
 apiRouter.use(`/category`, categoryRoute);
 apiRouter.use(`/product`, productRoute);
+apiRouter.use(`/statistic`, statisticRoute);
+apiRouter.use(`/file`, fileRoute);
 
 //grouped router
 app.use(`/api/v1`, apiRouter);
