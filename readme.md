@@ -7,6 +7,7 @@
 - [Deployment Link](#deployment-link)
 - [Run Locally](#run-locally)
 - [Tech Stack](#tech-stack)
+- [Frontend Repository](#frontend-repository)
 - [Contact](#contact)
 
 ---
@@ -62,6 +63,11 @@ This project is a RESTful API built with Nodejs, leveraging the  Expressjs, and 
 ## Tech Stack
 - **Backend:** Nodejs, Expressjs
 - **Database:**  MongoDb 
+
+---
+
+## Frontend Repository
+[KelolaProduk FE](https://github.com/ReyhanDiansa/knowledge-test-fe)
 
 ---
 ## Contact
