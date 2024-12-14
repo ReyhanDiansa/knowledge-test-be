@@ -5,14 +5,13 @@ const {
   updateProductSchema,
 } = require("../utils/validationSchema");
 const { responseFormatter } = require("../utils/utils");
-const upload = require("../utils/upload");
 require("dotenv");
 const { deleteFile } = require("../utils/deleteFile");
 const handleUpload = require("../utils/upload");
 const CategoryModel = require("../models/categoryModel");
 
 exports.addProduct = [
-  upload,
+  handleUpload,
   async (req, res) => {
     if (!req.file) {
       return responseFormatter(
@@ -302,7 +301,7 @@ exports.updateProduct = [
         return responseFormatter(
           response,
           400,
-          true,
+          false,
           `Product with name ${data.name} already exists, please look for another name`,
           null
         );

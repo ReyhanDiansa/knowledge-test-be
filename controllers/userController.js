@@ -114,7 +114,7 @@ exports.Register = async (request, response) => {
       return responseFormatter(
         response,
         400,
-        true,
+        false,
         "User already exists, please look for another email",
         null
       );

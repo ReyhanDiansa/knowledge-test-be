@@ -52,27 +52,33 @@ const upload = multer({
 // Middleware to handle file upload
 const handleUpload = (req, res, next) => {
   upload(req, res, async (err) => {
-        if (err) {
-          return responseFormatter(
-            res,
-            400,
-            false,
-            `File upload failed: ${err}`,
-            null
-          );
-        }
-    
-        try {
-          if (process.env.APP_ENV !== "local" && req.file) {
-            const fileUrl = await uploadToCloud(req.file);
-            req.file.location = fileUrl;
-          } else if (process.env.APP_ENV === "local" && req.file) {
-            req.file.location = `http://localhost:${process.env.PORT}/api/v1/file/${req.file.filename}`;
-          }
-          next();
-        } catch (uploadError) {
-          return responseFormatter(res, 500, false, `File processing failed: ${uploadError.message}`, null);
-        }
+    if (err) {
+      return responseFormatter(
+        res,
+        400,
+        false,
+        `File upload failed: ${err}`,
+        null
+      );
+    }
+
+    try {
+      if (process.env.APP_ENV !== "local" && req.file) {
+        const fileUrl = await uploadToCloud(req.file);
+        req.file.location = fileUrl;
+      } else if (process.env.APP_ENV === "local" && req.file) {
+        req.file.location = `http://localhost:${process.env.PORT}/api/v1/file/${req.file.filename}`;
+      }
+      next();
+    } catch (uploadError) {
+      return responseFormatter(
+        res,
+        500,
+        false,
+        `File processing failed: ${uploadError.message}`,
+        null
+      );
+    }
   });
 };
 

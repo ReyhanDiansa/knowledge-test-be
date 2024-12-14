@@ -30,9 +30,7 @@ const deleteFile = async (url) => {
       await del(url);
       return true;
     }
-  } catch (error) {
-    console.log(error);
-    
+  } catch (error) {    
     return false;
   }
 };

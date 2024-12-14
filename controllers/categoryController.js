@@ -40,7 +40,7 @@ exports.addCategory = async (request, response) => {
       return responseFormatter(
         response,
         400,
-        true,
+        false,
         `Categroy with name ${data.name} already exists, please look for another name`,
         null
       );
