@@ -36,12 +36,6 @@ This project is a RESTful API built with Nodejs, leveraging the  Expressjs, and 
 
 ---
 
-## Tech Stack
-- **Backend:** Nodejs, Expressjs
-- **Database:**  MongoDb 
-
----
-
 ## Run Locally
 
 - Clone the project
@@ -65,6 +59,11 @@ This project is a RESTful API built with Nodejs, leveraging the  Expressjs, and 
 
 ---
 
+## Tech Stack
+- **Backend:** Nodejs, Expressjs
+- **Database:**  MongoDb 
+
+---
 ## Contact
 
 Reyhan Marsalino Diansa - [@reyhanmd._](https://instagram.com/reyhanmd._) - reyhandiansa@gmail.com
