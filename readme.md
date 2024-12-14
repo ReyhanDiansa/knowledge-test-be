@@ -13,7 +13,7 @@
 ---
 
 ## Introduction
-This project is a RESTful API built with Nodejs, leveraging the  Expressjs, and use MongoDb for database. It serves as the backend for managing product data in an efficient and flexible manner. It supports CRUD operations to facilitate creating, retrieving, updating, and deleting product information..
+This project is a RESTful API built with Nodejs, leveraging the  Expressjs, and use MongoDb for database. It serves as the backend for managing product data in an efficient and flexible manner. It supports CRUD operations to facilitate creating, retrieving, updating, and deleting product information.
 
 
 ---
