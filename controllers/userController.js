@@ -194,13 +194,13 @@ exports.updateUser = async (request, response) => {
       data.password = md5(request.body.password);
     }
 
-    const lowercaseName = data.name.toLowerCase();
+    const lowercaseEmail = data.email.toLowerCase();
 
     let checkUser = await userModel.findOne({
       $and: [
         {
           _id: { $ne: id },
-          name: { $regex: new RegExp(`^${lowercaseName}$`, "i") },
+          email: { $regex: new RegExp(`^${lowercaseEmail}$`, "i") },
         },
       ],
     });
@@ -220,7 +220,7 @@ exports.updateUser = async (request, response) => {
         response,
         400,
         false,
-        `User with name ${data.name} already exists, please look for another name`,
+        `User with email ${data.email} already exists, please look for another email`,
         null
       );
     }
